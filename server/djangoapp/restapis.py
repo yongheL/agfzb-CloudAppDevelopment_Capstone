@@ -17,7 +17,10 @@ def analyze_review_sentiments(text):
     authenticator = IAMAuthenticator(api_key)
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
     natural_language_understanding.set_service_url(url)
-    response = natural_language_understanding.analyze( text=text+"Welcome",features=Features(sentiment=SentimentOptions(targets=[text+"Welcome"]))).get_result()
+    response = natural_language_understanding.analyze(
+        text=text,
+        language='en',
+        features=Features(sentiment=SentimentOptions())).get_result()
     label=json.dumps(response, indent=2)
     label = response['sentiment']['document']['label']
     
@@ -98,7 +101,7 @@ def get_dealer_reviews_from_cf(url, **kwargs):
             review_obj.sentiment = sentiment
             results.append(review_obj)
 
-    return result
+    return results
 
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
